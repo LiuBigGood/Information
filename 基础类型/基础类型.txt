@@ -1,0 +1,239 @@
+TypeScript
+类型推断： 帮助静态分析和检查 + 智能的感知和提示
+
+ts-node 工具 -》 转换ts代码 + 运行代码
+
+
+<一>基础类型
+
+1.基础类型 --用小
+js原有类型，在ts中可以直接使用
+let  a: js类型 = xxx
+
+布尔
+let isDone: boolean = false;
+
+数字
+let decLiteral: number = 6;
+支持浮点数
+let hexLiteral: number = 0xf00d;
+
+字符串
+let name: string = "bob";
+
+数组
+①类型[]
+let list: number[] = [1, 2, 3];
+②泛型定义
+let list Array<string> = ['1','2','3']
+嵌套数组
+let a (number[] | string | boolean)[] = [[1,2,3], 'abc', false]
+
+
+元组 Tuple  --已知数量和类型的数组
+let x: [string, number];
+x = ['hello', 10]; // OK
+1.元组可选元素
+let x : [number,string?] =[1]
+2.不建议修改元素的长度，运用数组方法
+3.可以通过扩展运算符，实现元素可选参数的作用以及扩展位数
+let x: [string, ...number[]];
+
+
+枚举 enum -- 枚举类型可以为一组数值赋予友好的名字
+定义一些固定配置项
+涉及反省映射
+key: 值 相互关联映射
+enum Color {Red, Green, Blue}
+let c: Color = Color.Green;
+
+// 设置初始值
+enum Color {
+  RED = 10,
+  PINK,
+  BLUE,
+}
+10为初始值,下面的数据会自增+1
+**赋值不能计算 
+
+// 字符串枚举 每个都需要声明
+enum Color {
+  RED = "红色",
+  PINK = "粉色",
+  BLUE = "蓝色",
+}
+const pink: Color = Color.PINK;
+pink = '粉色'
+
+常量枚举
+常量枚举与普通枚举的区别是，整个枚举会在编译阶段被删除 
+我们可以看下编译之后的效果
+
+
+任意值 any 
+避开类型检测
+let notSure: any = 4;
+
+空值 void   函数返回值
+void类型像是与any类型相反，它表示没有任何类型。 当一个函数没有返回值时
+使用
+function warnUser(): void {
+    alert("This is my warning message");
+}
+* void类型的值可以赋值为undefined和null
+
+Null 和 Undefined
+let u: undefined = undefined;
+let n: null = null;
+*undefined和null是所有类型的子集。除了never
+**当你指定了--strictNullChecks标记，null和undefined只能赋值给void和它们各自
+
+Unknown 类型
+unknown 和 any 的主要区别是 unknown 类型会更加严格 在对 unknown 类型的值执行大多数操作之前
+我们必须进行某种形式的检查
+unknown类型只能被赋值给 any 类型和 unknown 类型本身
+**所有类型都可以被归为 unknown
+所以
+let value: unknown;
+value = true; // OK
+value = 42; // OK
+value = "Hello World"; // OK
+value = []; // OK
+value = {}; // OK
+但是
+let value1: unknown = value; // OK
+let value2: any = value; // OK
+let value3: boolean = value; // Error
+...都会报错，除了any/unknown
+还有unknown,类型不能使用.语法，或函数执行
+
+
+Never --- 永不存在的值的类型保护/报错
+never类型使用---抛出异常
+不会有返回值的函数表达式
+function error(message: string): never {
+    throw new Error(message);
+}
+function fail() {
+    return error("Something failed");
+}
+// 返回never的函数必须存在无法达到的终点
+function infiniteLoop(): never {
+    while (true) {
+    }
+}
+**never是任何类型的子集，没有类型是never的子类型
+或可以赋值给never类型
+
+
+BigInt 大数类型
+①类型
+let a = BigInt(12356563436743)
+②类型
+let a = 1231231231123545n
+两种表现方式
+2-4  *  2个字节
+双精度浮点数
+js表示最大数 
+2 ** 1023 * 1.999
+js最大安全数 - 能够精准展示的
+2 * 53 -1
+number.MAX_SAFE_INTEGER
+
+使用 BigInt 可以安全地存储和操作大整数
+
+
+Symbol 返回一个唯一的字符串 ,不能使用构造函数new
+let a : Symbol =  Symbol() 
+let b : Symbol =  Symbol()
+ a === b  // false  
+
+
+Object非原始类型
+object, Object 和 {} 类型
+ Object: 严格模式下除了null和undefined其他类型值都可以赋值给它
+ {}： 和Object一致原始类型和非原始类型的集合
+ object: 类型用于表示非原始类型
+以下为原始类型
+string、boolean、number、bigint、symbol、null 和 undefined
+
+
+类型断言
+类型断言好比其它语言里的类型转换
+自定义该值类型
+let strLength: number = (<string>someValue).length;
+let strLength: number = (someValue as string).length;
+
+字面量类型
+字面量类型是更具体的 string, number 或 boolean 类型
+type Greeting = "Hello"  
+Greeting不是string类型，而是更具体的"Hello"类型，这代表
+Greeting的值只能是字符串的Hello
+1.字符串字面量类型
+2.布尔字面量类型
+3.数字字面量类型
+4.对象字面量类型
+5.数组字面量类型
+6.BigInt
+7.symbol
+上述类型，又是类型又可以是值
+
+
+联合类型（union types）
+联合字面量类型例子
+type Greeting = "Hello" | "Hi" | "Welcome"
+
+keyof获取一个类型或者泛型T的字面量联合类型
+interface Person {
+    name: string
+    age: number
+    location: string
+}
+type SomeNewType  = keyof Person
+SomeNewType => 'name' |  'age' | 'location'
+
+typeof操作符用于获取变量的类型
+const p = {
+  name: 'CJ',
+  age: 18
+};
+
+type Person = typeof p;
+
+// 等同于
+type Person = {
+  name: string;
+  age: number;
+}
+
+as const 字面量推断
+as const  ---> TypeScript 3.4 中新增的一个特性
+ Type '"hello"
+ let x = "hello" as const;
+1. x不能进行修改,类似于字面量类型
+let y = [10, 20] as const;
+2.在数组中类似于 readonly [10, 20]
+let z = { text: "hello" } as const;
+3.在对象中，类似于
+ { readonly text: "hello" } 
+4.除了tsx文件，其他地方可以使用 <const>"hello"书写
+5.使用const断言，可以不用书写类型
+6.类型注释。const断言允许TypeScript采取表达式的最具体类型。
+7.const 内容为实时，不能参与计算或判断后得到
+
+Symbols
+自ECMAScript 2015起，symbol成为了一种新的原生类型
+Symbols是不可改变且唯一的。
+let sym2 = Symbol("key");
+let sym3 = Symbol("key");
+
+sym2 === sym3; // false, symbols是唯一的
+
+let sym = Symbol();
+
+symbols也可以被用做对象属性的键
+let obj = {
+    [sym]: "value"
+};
+
+console.log(obj[sym]); // "value"

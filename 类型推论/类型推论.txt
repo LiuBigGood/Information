@@ -1,0 +1,61 @@
+类型推论(type inference)
+TypeScript里，在有些没有明确指出类型的地方，
+类型推论会帮助提供类型
+let x = 3;
+x会被判断为数字
+变量x的类型被推断为数字。 这种推断发生在初始化变量和成员，
+设置默认参数值和决定函数返回值时。
+
+
+最佳通用类型
+通用类型取自候选类型，有些时候候选类型共享相同的通用类型，但是却没有一个类型能做为所有候选类型的类型
+let zoo: Animal[] = [new Rhino(), new Elephant(), new Snake()]; //error
+最终会被推到位联合类型
+let zoo: (Rhino | Elephant | Snake)[]
+
+上下文类型
+上下文归类会发生在表达式的类型与所处的位置相关
+window.onmousedown = function(mouseEvent) {
+    console.log(mouseEvent.button);  //<- Error
+};
+场景
+1.函数的参数
+2.赋值表达式的右边
+3.类型断言
+4.对象成员和数组字面量和返回值语句
+上下文类型也会做为最佳通用类型的候选类型
+function createZoo(): Animal[] {
+    return [new Rhino(), new Elephant(), new Snake()];
+}
+最佳通用类型有4个候选者：Animal，Rhino，Elephant和Snake
+但最终Animal会被做为最佳通用类型
+依据上下文类型来推断
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

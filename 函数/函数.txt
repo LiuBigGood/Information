@@ -1,0 +1,100 @@
+函数
+1.匿名函数
+2.具名函数
+
+3.函数类型
+function add(x: number, y: number): number {
+    return x + y;
+}
+
+let myAdd = function(x: number, y: number): number { return x + y; };
+**TypeScript能够根据返回语句自动推断出返回值类型，因此我们通常省略它。
+
+4.完整函数类型
+let myAdd: (x:number, y:number) => number =
+    function(x: number, y: number): number { return x + y; };
+*完整函数类型分为 参数 +  返回值
+(x:number, y:number)为参数  number为返回值 中间用=>方便理解
+
+5.推断类型
+如果你在赋值语句的一边指定了类型但是另一边没有类型的话，TypeScript编译器会自动识别出类型
+这叫做“按上下文归类”，是类型推论的一种
+
+6.可选参数和默认参数
+1.正常情况下函数的实参个数，必须与形参相对应。
+2.在形参旁加上？，代表可选参数，可选参数非必须传递参数、可选参数必须跟在必须参数后面
+3.形参后可以添加默认参数，与方式js一致
+4.可选参数类型和默认参数类型共享，意思默认参数不需要再声明类型，但可选参数需要
+5.默认值参数可以在必须参数前，但实参传递时，如果默认值参数不接收值，就必须显式传递
+undefined
+function buildName(firstName = "Will", lastName: string) {
+    return firstName + " " + lastName;
+}
+let result4 = buildName(undefined, "Adams"); 
+
+7.剩余参数
+1.arguments代表实参集合，是一个类数组，与js一致
+2....参数-》 代表剩余参数，是一个集合数据 。剩余参数会被当做个数不限的可选参数
+function buildName(firstName: string, ...restOfName: string[]) {
+  return firstName + " " + restOfName.join(" ");
+}
+
+let buildNameFun: (fname: string, ...rest: string[]) => string = buildName;
+
+8.this
+this和箭头函数
+箭头函数this： 为上层作用域的this
+嵌套函数的this为window
+构造函数this，指向实例化对象
+
+9.this参数
+一个显式的this参数->指向对应类型，防止ts报错
+不允许存在this只想为any的情况
+interface Deck {
+    suits: string[];
+    cards: number[];
+    createCardPicker(this: Deck): () => Card;
+}
+
+10.回调函数里的this参数
+
+
+
+
+11.重载
+JavaScript里函数根据传入不同的参数而返回不同类型的数据是很常见的
+优势函数会根据传递传参，返回不同类型的结果值，需要函数重载
+function pickCard(x: {suit: string; card: number; }[]): number;
+function pickCard(x: number): {suit: string; card: number; };
+function pickCard(x): any {
+    // Check to see if we're working with an object/array
+    // if so, they gave us the deck and we'll pick the card
+    if (typeof x == "object") {
+        let pickedCard = Math.floor(Math.random() * x.length);
+        return pickedCard;
+    }
+    // Otherwise just let them pick the card
+    else if (typeof x == "number") {
+        let pickedSuit = Math.floor(x / 13);
+        return { suit: suits[pickedSuit], card: x % 13 };
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

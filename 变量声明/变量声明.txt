@@ -1,0 +1,37 @@
+
+变量声明
+var 全局声明  --全局作用域
+let 块级作用域/暂时性死区   {}包裹区域称为块 并且没有变量提升
+const 声明是声明变量的另一种方式
+var可以重复声明多个同一变量，最终指向一个
+let不能重复声明同一变量
+
+*最小特权原则
+
+
+解构
+解构数组
+let array = [1,2]
+let [one,two] = array
+
+对象解构
+let o = {
+    a: "foo",
+    b: 12,
+    c: "bar"
+};
+let { a, b } = o;
+组合写法
+let {a, b}: {a: string, b: number} = o;
+
+默认值
+默认值可以让你在属性为 undefined 时使用缺省值：
+function keepWholeObject(wholeObject: { a: string, b?: number }) {
+    let { a, b = 1001 } = wholeObject;
+    这里b = 1001为默认值
+}
+
+展开  展开操作符正与解构相反。 它允许你将一个数组展开为另一个数组，或将一个对象展开为另一个对象。
+let first = [1, 2];
+let second = [3, 4];
+let bothPlus = [0, ...first, ...second, 5];

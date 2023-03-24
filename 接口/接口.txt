@@ -1,0 +1,147 @@
+接口interface
+接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。
+接口会定义一种数据的类型结构，在使用此接口类型时，满足里面定义的
+数据类型结构是必须条件，满足结构但不是一定要一样
+**类型检查器不会去检查属性的顺序，只要相应的属性存在并且类型也是对的就可以。
+
+1.接口是用来描述对象的
+2.接口是对类一部分行为的抽象
+
+
+接口定义的属性前使用？，代表可选属性。可选属性非必须存在，只是对属性进行预设，还有利于
+捕获引用了不存在的属性时的错误
+interface SquareConfig {
+  color?: string;
+  width?: number;
+}
+
+2.只读属性 readonly。接口定义的属性前使用， 
+对象属性只能在对象刚刚创建的时候修改其值，用于数组中，会取消
+数组所有可变方法
+interface SquareConfig {
+  readonly color: string;
+  width?: number;
+}
+
+readonly vs const区别
+readonly： 主要针对属性
+const : 主要针对变量
+
+3.额外的属性检查
+最佳的方式是能够添加一个字符串索引签名，前提是你能够确定这个对象
+可能具有某些做为特殊用途使用的额外属性。 如果SquareConfig带有上
+面定义的类型的color和width属性，并且还会带有任意数量的其它属性，
+那么我们可以这样定义它：
+interface SquareConfig {
+    color?: string;
+    width?: number;
+    [propName: string]: any;
+}
+但实际中，不推荐直接添加额外属性，这样会丢是原有的属性检查
+推荐
+interface SquareConfig {
+    color?: string;
+    width?: number;
+    nest: {
+       [propName: string]: any;
+    }
+}
+以此方式添加
+
+
+4.函数类型
+接口能够描述JavaScript中对象拥有的各种各样的外形。 除了描述带有属性的普通对象外
+接口也可以描述函数类型
+interface SearchFunc {
+  (source: string, subString: string): boolean;
+}
+let fu : SearchFunc
+fu = function(xxx: string, subString: string ) {
+}
+**注意函数推断
+
+4.可索引的类型 
+用interface来描述数组
+interface {
+  [index: number] : number | string
+}
+与使用接口描述函数类型差不多，我们也可以描述那些能够“通过索引得到”的类型，
+
+
+5.类类型
+接口是对类部分行为的抽象
+类成员
+ 实例的属性
+ 原型上的方法
+implements 
+
+
+6.类静态部分与实例部分的区别
+类分为
+实例属性 --静态属性
+原型方法  -- 实例部分
+利用接口封装类时，要分为两步，第一步单独封装出关于静态属性的接口
+和实例接口，通过一个创建函数，将二者联系在一起
+
+
+
+
+7.继承接口
+interface shape {
+    color :  string
+}
+
+interface Square extends shape {
+    sex: number
+}
+let square = <Square>{};
+square.color = "blue";
+square.sex = 10;
+
+一个接口可以继承多个接口，创建出多个接口的合成接口。
+interface Shape {
+    color: string;
+}
+
+interface PenStroke {
+    penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+    sideLength: number;
+}
+
+let square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+square.penWidth = 5.0;
+
+8.混合类型
+一个接口之中，有函数也有对象
+interface Counter {
+    (start: number): string;
+    interval: number;
+    reset(): void;
+}
+function getCounter(): Counter {
+    let counter = <Counter>function (start: number) { };
+    counter.interval = 123;
+    counter.reset = function () { };
+    return counter;
+}
+
+9.接口继承类
+
+
+类
+类可以继承(extends)类、
+类可以实现(implements)接口
+
+接口
+接口可以继承(extends)接口或类
+接口不能实现(implements)接口类
+
+接口不能实现接口或者类，所以实现只能用于类身上,即类可以实现接口或类
+接口可以继承接口或类
+类不可以继承接口，类只能继承类
+可多继承或者多实现

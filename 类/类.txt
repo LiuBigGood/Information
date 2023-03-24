@@ -1,0 +1,120 @@
+10.类
+class Greeter {
+    greeting: string;
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        return "Hello, " + this.greeting;
+    }
+}
+
+let greeter = new Greeter("world");
+
+11类的继承
+在TypeScript里，我们可以使用常用的面向对象模式。 基于类的程序设计中一种最基本的模式是允许使用继承来扩展现有的类。
+基类 Animal
+class Animal {
+    move(distanceInMeters: number = 0) {
+        console.log(`Animal moved ${distanceInMeters}m.`);
+    }
+}
+派生类 dog
+class dog extends Animal {
+    bark() {
+        console.log('Woof! Woof!');
+    }
+}
+const dog = new Dog();
+dog.bark(); // dog类自身方法
+dog.move(10); 继承方法
+dog.bark();
+
+12.公共，私有与受保护的修饰符
+public 公有 默认值   自身、子类，实例
+可以在声明它的类的外部访问 ，生成实例可以访问，并且子类也能访问
+private 私有  自身
+它就不能在声明它的类的外部访问 生成实例后无法访问，并且子类也不能能访问
+protected 受保护的   自身、子类  
+protected成员在派生类中仍然可以访问,但实例对象无法访问
+
+13.readonly修饰符
+readonly关键字将属性设置为只读的 只能加载属性签名和索引签名上
+class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+let dad = new Octopus("Man with the 8 strong legs");
+dad.name = "Man with the 3-piece suit"; // 错误! name 是只读的.
+
+
+14.参数属性
+class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+参数属性优化  -》
+仅针对于，私有化属性.参数属性通过给构造函数参数添加一个访问限定符来声明
+class Octopus {
+    constructor (private name: string) {},
+     move(distanceInMeters: number) {
+        console.log(`${this.name}`);
+    }
+}
+
+15.存取器
+getters/setters来截取对对象成员的访问
+只带有get不带有set的存取器自动被推断为readonly
+存取器要求你将编译器设置为输出ECMAScript 5或更高。 不支持降级到ECMAScript 3
+
+
+16.静态属性 static 
+访问方式
+类名.静态属性
+仅当类被实例化的时候才会被初始化的属性。 我们也可以创建类的静态成员
+这些属性存在于类本身上面而不是类的实例上
+
+17.抽象类
+抽象类做为其它派生类的基类使用 不能直接被实例化
+abstract关键字 是用于(定义抽象类)和(抽象类内部定义抽象方法)。
+abstract class Animal {
+    abstract makeSound(): void;
+    move(): void {
+        console.log('roaming the earch...');
+    }
+}
+抽象类的方法，在派生类中实现，类似于接口interface的形式
+这里理解为一个占位符。这里定义方法签名但不包含方法体
+*abstract关键字并且可以包含访问修饰符（static、private...）
+*抽象类和抽象方法一般用来定义某种标准，可以用来实现多态
+抽象类的派生类中，可以定义属于自己的方法
+
+
+18.构造函数
+将类转换为构造函数，使用
+1.使用它的实例对象
+2.将这个类赋值给其他值，使其可以作为一个构造函数使用
+同时附带，这类原有的属性和方法
+
+19.把类当做接口使用
+类定义会创建两个东西：
+   1.类的实例类型
+   2.一个构造函数
+因此类也可以当做interface使用
+class Point {
+    x: number;
+    y: number;
+    [propName: string]: any
+}
+let point3d: Point = {x: 1, y: 2, z: 3};
+
+类的静态部分
+constructor以内的内容
+实例部分
+constructor以外的内容

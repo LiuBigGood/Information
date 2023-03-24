@@ -1,0 +1,84 @@
+泛型
+泛型来创建可重用的组件
+类型变量，它是一种特殊的变量，只用于表示类型而不是值。
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+2.泛型变量 T
+**类型变量代表的是任意类型
+第一种写法
+function loggingIdentity<T>(arg: T[]): T[] {
+    console.log(arg.length);  // Array has a .length, so no more error
+    return arg;
+}
+第二种写法
+function loggingIdentity<T>(arg: Array<T>): Array<T> {
+    console.log(arg.length);  // Array has a .length, so no more error
+    return arg;
+}
+
+
+3.泛型类型/泛型参数
+泛型函数的类型与非泛型函数的类型没什么不同，只是有一个类型参数在最前面，像函数声明一样：泛型函数的类型与非泛型函数的类型没什么不同，只是有一个类型参数在最前面，像函数声明一样：
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+let myIdentity: <T>(arg: T) => T = identity;
+
+我们还可以使用带有调用签名的对象字面量来定义泛型函数：
+function identity<T>(arg: T): T {
+    return arg;
+}
+
+let myIdentity: {<T>(arg: T): T} = identity;
+
+**我们可能想把泛型参数当作整个接口的一个参数。 这样我们就能清楚的知道使用的具体是哪个泛型类型
+显式展示泛型参数
+interface GenericIdentityFn<T> {
+    (arg:T): T
+}
+function identity<T>(arg: T): T {
+    return arg;
+}
+let myIdentity：GenericIdentityFn<number> = identity
+
+4.泛型类
+型类看上去与泛型接口差不多。 泛型类使用（<>）括起泛型类型，跟在类名后面
+class GenericNumber<T> {
+    zeroValue: T;
+    add: (x: T, y: T) => T;
+}
+**类分为静态部分、实力部分
+泛型类指的是实例部分的类型，所以类的静态属性不能使用这个泛型类型。
+
+5.泛型约束
+T默认指代任何类型，但在函数中传参并不是接收所有类型
+因此需要对T有一定的限制，就出现了泛型约束
+使用这个接口和extends关键字还实现约束
+interface Lengthwise {
+    length: number;
+}
+
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+    console.log(arg.length);  // Now we know it has a .length property, so no more error
+    return arg;
+}
+
+在泛型约束中使用类型参数
+你可以声明一个类型参数，且它被另一个类型参数所约束
+通常采用keyof、typeof来进行操作
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key];
+}
+
+在泛型里使用类类型
+类类型
+1.实例部分
+2.静态属性部分
+3.用一个函数将其串联
+
+function create<T>(c: {new(): T; }): T {
+    return new c();
+}
